@@ -1,6 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dream_app/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -68,6 +75,22 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void addUser() {
+    print("User added with ID:");
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    firestore.collection("users").add({
+      "name": "Masihur",
+      "email": "masihur@example.com",
+      "age": 25,
+      "created_at": FieldValue.serverTimestamp() // Stores current timestamp
+    }).then((docRef) {
+      print("User added with ID: ${docRef.id}");
+    }).catchError((error) {
+      print("Error adding user: $error");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -116,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: addUser,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
