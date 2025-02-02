@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.white70,
                   shape: BoxShape.circle,
                 ),
-                child: Image.asset("assets/icons/deub.png"),
+                child: Image.asset("assets/icons/dream.png"),
               ),
               Padding(
                 padding: EdgeInsets.all(10.0),

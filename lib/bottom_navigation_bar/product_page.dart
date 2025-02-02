@@ -118,7 +118,7 @@ class _ProductPageState extends State<ProductPage> {
                   color: Colors.white70,
                   shape: BoxShape.circle,
                 ),
-                child: Image.asset("assets/icons/deub.png"),
+                child: Image.asset("assets/icons/dream.png"),
               ),
               const SizedBox(height: 20),
               const Divider(),
@@ -327,11 +327,19 @@ class _ProductPageState extends State<ProductPage> {
                           image: AssetImage('assets/images/watch_1.jpg'),
                           fit: BoxFit.fill)),
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 18.0),
-                    child: Text("Daily Watch video & Earn Money",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black)),
+                    padding: const EdgeInsets.only(left: 18.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Daily Watch video\n&\nEarn Money",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            fontSize: 20
+                          ),
+                        textAlign: TextAlign.center,
+
+                      ),
+                    ),
                   ),
                 ),
                 Positioned(
