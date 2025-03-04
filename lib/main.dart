@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -15,10 +16,22 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   try {
+
+
     WidgetsFlutterBinding.ensureInitialized();
+
+
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+
+    // Initialize Supabase
+    await Supabase.initialize(
+      url: 'https://bxfljtvmlhqjhkhnwtcv.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4ZmxqdHZtbGhxamhraG53dGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEwNDQ4NjYsImV4cCI6MjA1NjYyMDg2Nn0.JLpuV9yKAlgFWmYdDb0DFs8_77Ng_reAMJ5p8yQ1Gdo',
+    );
+
 
     requestNotificationPermission();
     await FirebaseMessaging.instance.setAutoInitEnabled(true);

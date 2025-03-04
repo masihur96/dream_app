@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dream_app/bottom_navigation_bar/cart_page.dart';
+
 import 'package:dream_app/controller/product_controller.dart';
+import 'package:dream_app/controller/supabase_storage_service.dart';
 import 'package:dream_app/controller/user_controller.dart';
 import 'package:dream_app/pages/category_products_page.dart';
 import 'package:dream_app/pages/contact_info.dart';
@@ -40,11 +44,42 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
+
+  final SupabaseStorageService _storageService = SupabaseStorageService();
+  String? _downloadLink;
+
+  Future<void> _uploadFile() async {
+    try {
+      // Replace with the path to your file
+      final file = File("path/to/your/file.txt");
+
+      // Upload the file to Supabase Storage
+      final downloadLink = await _storageService.uploadFile(file, 'my_bucket');
+
+      setState(() {
+        _downloadLink = downloadLink;
+      });
+
+      ScaffoldMessenger.of(context!).showSnackBar(
+        SnackBar(content: Text("File uploaded successfully!")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context!).showSnackBar(
+        SnackBar(content: Text("Error uploading file: $e")),
+      );
+    }
+  }
+
+
+
   @override
   void initState() {
     super.initState();
     _checkPreferences();
+
   }
+
+
 
   Future<void> fetch() async {
     await productController.getProducts(_itemCount);
