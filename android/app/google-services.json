@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "243502508159",
+    "project_id": "dream-app-f6265",
+    "storage_bucket": "dream-app-f6265.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243502508159:android:431f26d8b9090dcab8374a",
+        "android_client_info": {
+          "package_name": "com.example.dream_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAOGT4AtCIOiDn_E4bYF9AtoBIY151aVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

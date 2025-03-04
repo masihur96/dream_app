@@ -20,6 +20,7 @@ import 'package:dream_app/widgets/solid_color_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,32 +45,44 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
-
   final SupabaseStorageService _storageService = SupabaseStorageService();
+  final ImagePicker _picker = ImagePicker();
   String? _downloadLink;
+  File? _pickedFile;
 
-  Future<void> _uploadFile() async {
+  Future<void> _uploadFile(BuildContext context) async {
     try {
-      // Replace with the path to your file
-      final file = File("path/to/your/file.txt");
+      // Pick an image from the gallery
+      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile == null) {
+        // User canceled the picker
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("No file selected")),
+        );
+        return;
+      }
+
+      // Convert XFile to File
+      final file = File(pickedFile.path);
 
       // Upload the file to Supabase Storage
-      final downloadLink = await _storageService.uploadFile(file, 'my_bucket');
+      final downloadLink = await _storageService.uploadFile(file, 'dream_product');
 
       setState(() {
         _downloadLink = downloadLink;
+        _pickedFile = file; // Store the picked file for display
       });
 
-      ScaffoldMessenger.of(context!).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("File uploaded successfully!")),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context!).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error uploading file: $e")),
       );
     }
   }
-
 
 
   @override
@@ -146,14 +159,19 @@ class _ProductPageState extends State<ProductPage> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                height: 80,
-                width: 80,
-                decoration: const BoxDecoration(
-                  color: Colors.white70,
-                  shape: BoxShape.circle,
+              GestureDetector(
+                onTap: (){
+                  _uploadFile(context);
+                },
+                child: Container(
+                  height: 80,
+                  width: 80,
+                  decoration: const BoxDecoration(
+                    color: Colors.white70,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset("assets/icons/dream.png"),
                 ),
-                child: Image.asset("assets/icons/dream.png"),
               ),
               const SizedBox(height: 20),
               const Divider(),
