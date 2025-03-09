@@ -24,7 +24,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../home_nav.dart';
 
 class ProductPage extends StatefulWidget {
@@ -63,12 +63,18 @@ class _ProductPageState extends State<ProductPage> {
         return;
       }
 
+
+
       // Convert XFile to File
       final file = File(pickedFile.path);
 
-      // Upload the file to Supabase Storage
-      final downloadLink = await _storageService.uploadFile(file, 'dream_product');
 
+
+      // Upload the file to Supabase Storage
+      final downloadLink = await _storageService.uploadFile(file, 'my_bucket');
+
+
+      print("DDDDD: $downloadLink");
       setState(() {
         _downloadLink = downloadLink;
         _pickedFile = file; // Store the picked file for display
@@ -147,6 +153,10 @@ class _ProductPageState extends State<ProductPage> {
     }
     _refreshController.loadComplete();
   }
+  saveNote()async{
+    await Supabase.instance.client.from("notes").insert({"body":"textController.text"});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +171,8 @@ class _ProductPageState extends State<ProductPage> {
               ),
               GestureDetector(
                 onTap: (){
-                  _uploadFile(context);
+                  //saveNote();
+                   _uploadFile(context);
                 },
                 child: Container(
                   height: 80,

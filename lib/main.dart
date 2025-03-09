@@ -19,19 +19,14 @@ Future<void> main() async {
 
 
     WidgetsFlutterBinding.ensureInitialized();
-
-
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-
-
     // Initialize Supabase
     await Supabase.initialize(
       url: 'https://bxfljtvmlhqjhkhnwtcv.supabase.co',
       anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4ZmxqdHZtbGhxamhraG53dGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEwNDQ4NjYsImV4cCI6MjA1NjYyMDg2Nn0.JLpuV9yKAlgFWmYdDb0DFs8_77Ng_reAMJ5p8yQ1Gdo',
     );
-
 
     requestNotificationPermission();
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
