@@ -55,7 +55,6 @@ class _BodyState extends State<Body> {
         ProductImages(product: widget.product),
         TopRoundedContainer(
           color: Colors.white,
-          //_themeController.isDarkMode.value ? Colors.black : Colors.white,
           child: Column(
             children: [
               Column(
@@ -66,356 +65,366 @@ class _BodyState extends State<Body> {
                         horizontal: getProportionateScreenWidth(context, 20)),
                     child: Text(
                       widget.product.title!,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
+                      style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
                           ),
                     ),
                   ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: getProportionateScreenWidth(context, 20)),
-                        child: Text(
-                          'Price: ' + '\৳${widget.product.price}',
+                  SizedBox(height: 15),
+                  
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(context, 20),
+                      vertical: 15,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[50],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Price:',
                           style: TextStyle(
-                              color: kPrimaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: size.width * .045),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      // Text(
-                      //   "\৳${widget.product.price}",
-                      //   style: TextStyle(
-                      //     decoration: TextDecoration.lineThrough,
-                      //     fontSize: size.width*.036,
-                      //     fontWeight: FontWeight.w300,
-                      //     color: Colors.grey[600],
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-
-                  ///product size, color
-                  Row(
-                    children: [
-                      widget.product.size!.isNotEmpty
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      getProportionateScreenWidth(context, 20)),
-                              child: Container(
-                                width: size.width * .25,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: size.height * .01),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: kPrimaryColor, width: 1),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5))),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    isDense: true,
-                                    isExpanded: true,
-                                    value: _size,
-                                    hint: Text(
-                                      'Size',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                            color: Colors.black,
-                                          ),
-                                    ),
-                                    items: widget.product.size!.map((sizes) {
-                                      return DropdownMenuItem(
-                                        child: Text(
-                                          sizes,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(
-                                                color: Colors.black,
-                                              ),
-                                        ),
-                                        value: sizes.toString(),
-                                      );
-                                    }).toList(),
-                                    onChanged: (newVal) {
-                                      setState(() {
-                                        _size = newVal as String;
-                                      });
-                                    },
-                                    dropdownColor: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container(),
-                      widget.product.colors!.isNotEmpty
-                          ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      getProportionateScreenWidth(context, 20)),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Color: ',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                          color: Colors.black,
-                                        ),
-                                  ),
-                                  Container(
-                                    width: size.width * .4,
-                                    height: size.height * .05,
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        shrinkWrap: true,
-                                        itemCount:
-                                            widget.product.colors!.length,
-                                        itemBuilder: (BuildContext ctx, index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(4.0),
-                                            child: InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  indx = index;
-                                                });
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(5)),
-                                                    border: Border.all(
-                                                        color: kPrimaryColor),
-                                                    color: index == indx
-                                                        ? Colors.green
-                                                            .withOpacity(0.5)
-                                                        : Colors.white,
-                                                    shape: BoxShape.rectangle),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: Container(
-                                                    height: 30,
-                                                    width: 20,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    5)),
-                                                        color: widget.product
-                                                                .colors!.isEmpty
-                                                            ? Colors.white70
-                                                            : Color(int.parse(
-                                                                widget.product
-                                                                        .colors![
-                                                                    index])),
-                                                        shape:
-                                                            BoxShape.rectangle),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: getProportionateScreenWidth(context, 20),
-                      right: getProportionateScreenWidth(context, 64),
-                    ),
-                    child: Text(
-                      widget.product.description!,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
+                            color: Colors.grey[600],
+                            fontSize: size.width * 0.04,
                           ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          '৳${widget.product.price}',
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: size.width * 0.055,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 20),
+
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(context, 20),
+                    ),
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[200]!),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (widget.product.size!.isNotEmpty) ...[
+                          Text(
+                            'Select Size',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: size.width * 0.04,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: kPrimaryColor.withOpacity(0.5)),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                value: _size,
+                                hint: Text('Choose Size'),
+                                items: widget.product.size!.map((sizes) {
+                                  return DropdownMenuItem(
+                                    child: Text(sizes),
+                                    value: sizes.toString(),
+                                  );
+                                }).toList(),
+                                onChanged: (newVal) {
+                                  setState(() {
+                                    _size = newVal as String;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                        if (widget.product.colors!.isNotEmpty) ...[
+                          SizedBox(height: 20),
+                          Text(
+                            'Available Colors',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: size.width * 0.04,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            height: size.height * 0.06,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: widget.product.colors!.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      indx = index;
+                                    });
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 10),
+                                    padding: EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: indx == index 
+                                            ? kPrimaryColor 
+                                            : Colors.transparent,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Container(
+                                      height: 35,
+                                      width: 35,
+                                      decoration: BoxDecoration(
+                                        color: Color(
+                                          int.parse(widget.product.colors![index])
+                                        ),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(context, 20),
+                    ),
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[50],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Description',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: size.width * 0.045,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          widget.product.description!,
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              TopRoundedContainer(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: getProportionateScreenWidth(context, 15),
-                        top: getProportionateScreenWidth(context, 15),
-                      ),
-                      child: GradientButton(
-                          child: Text(
-                            'Add To Cart',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            if (widget.product.size!.isNotEmpty &&
-                                _size == null) {
-                              showToast('Please select product size');
-                            } else {
-                              if (id == null) {
-                                if (productController.productIdList
-                                    .contains(widget.product.id)) {
-                                  setState(() {
-                                    exist = true;
-                                  });
-                                  print('product $exist');
-                                }
-                              } else {
-                                if (userController.productIds
-                                    .contains(widget.product.id)) {
-                                  setState(() {
-                                    exist = true;
-                                  });
-                                  print('user $exist');
-                                }
-                              }
-                              if (exist == false) {
-                                setState(() {
-                                  exist = true;
-                                });
-                                String? size =
-                                    _size == null ? 'No Size' : _size;
-                                String? color = widget.product.colors!.isEmpty
-                                    ? 'No Color'
-                                    : widget.product.colors![indx];
-                                id == null
-                                    ? productController.addToCart(
-                                        widget.product.title!,
-                                        widget.product.thumbNail!,
-                                        widget.product.id!,
-                                        widget.product.price!,
-                                        1,
-                                        color!,
-                                        size!,
-                                        widget.product.image![0],
-                                        widget.product.profitAmount!)
-                                    : userController.addToUserCart(
-                                        widget.product.title!,
-                                        widget.product.thumbNail!,
-                                        widget.product.id!,
-                                        widget.product.price!,
-                                        1,
-                                        color!,
-                                        size!,
-                                        widget.product.image![0],
-                                        widget.product.profitAmount!);
-                              } else {
-                                showToast(
-                                    'This product already exist in your cart');
-                              }
-                            }
-                          },
-                          borderRadius: 5.0,
-                          height: size.width * .12,
-                          width: size.width * .4,
-                          gradientColors: [
-                            Color(0xFF0198DD),
-                            Color(0xFF19B52B)
-                          ]),
+              SizedBox(height: 20),
+
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: getProportionateScreenWidth(context, 20),
+                  vertical: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, -3),
+                      blurRadius: 6,
+                      color: Colors.black.withOpacity(0.1),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: getProportionateScreenWidth(context, 15),
-                        top: getProportionateScreenWidth(context, 15),
-                      ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
                       child: GradientButton(
-                          child: Text(
-                            'Buy Now',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            if (widget.product.size!.isNotEmpty &&
-                                _size == null) {
-                              showToast('Please select product size');
-                            } else {
-                              if (id == null) {
-                                if (productController.productIdList
-                                    .contains(widget.product.id)) {
-                                  setState(() {
-                                    exist = true;
-                                  });
-                                  print('product $exist');
-                                }
-                              } else {
-                                if (userController.productIds
-                                    .contains(widget.product.id)) {
-                                  setState(() {
-                                    exist = true;
-                                  });
-                                  print('user $exist');
-                                }
-                              }
-                              if (exist == false) {
+                        
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.shopping_cart, color: Colors.white),
+                            SizedBox(width: 10),
+                            Text(
+                              'Add To Cart',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: size.width * 0.04,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {
+                          if (widget.product.size!.isNotEmpty &&
+                              _size == null) {
+                            showToast('Please select product size');
+                          } else {
+                            if (id == null) {
+                              if (productController.productIdList
+                                  .contains(widget.product.id)) {
                                 setState(() {
                                   exist = true;
                                 });
-                                String? size =
-                                    _size == null ? 'No Size' : _size;
-                                String? color = widget.product.colors!.isEmpty
-                                    ? 'No Color'
-                                    : widget.product.colors![indx];
-                                id == null
-                                    ? productController
-                                        .addToCart(
-                                            widget.product.title!,
-                                            widget.product.thumbNail!,
-                                            widget.product.id!,
-                                            widget.product.price!,
-                                            1,
-                                            color!,
-                                            size!,
-                                            widget.product.image![0],
-                                            widget.product.profitAmount!)
-                                        .then((value) {
-                                        Get.to(() => CartPage());
-                                      })
-                                    : userController
-                                        .addToUserCart(
-                                            widget.product.title!,
-                                            widget.product.thumbNail!,
-                                            widget.product.id!,
-                                            widget.product.price!,
-                                            1,
-                                            color!,
-                                            size!,
-                                            widget.product.image![0],
-                                            widget.product.profitAmount!)
-                                        .then((value) {
-                                        Get.to(() => CartPage());
-                                      });
-                              } else {
-                                Get.to(() => CartPage());
+                                print('product $exist');
+                              }
+                            } else {
+                              if (userController.productIds
+                                  .contains(widget.product.id)) {
+                                setState(() {
+                                  exist = true;
+                                });
+                                print('user $exist');
                               }
                             }
-                          },
-                          borderRadius: 5.0,
-                          height: size.width * .12,
-                          width: size.width * .4,
-                          gradientColors: [
-                            Color(0xFF0198DD),
-                            Color(0xFF19B52B)
-                          ]),
+                            if (exist == false) {
+                              setState(() {
+                                exist = true;
+                              });
+                              String? size =
+                                  _size == null ? 'No Size' : _size;
+                              String? color = widget.product.colors!.isEmpty
+                                  ? 'No Color'
+                                  : widget.product.colors![indx];
+                              id == null
+                                  ? productController.addToCart(
+                                      widget.product.title!,
+                                      widget.product.thumbNail!,
+                                      widget.product.id!,
+                                      widget.product.price!,
+                                      1,
+                                      color!,
+                                      size!,
+                                      widget.product.image![0],
+                                      widget.product.profitAmount!)
+                                  : userController.addToUserCart(
+                                      widget.product.title!,
+                                      widget.product.thumbNail!,
+                                      widget.product.id!,
+                                      widget.product.price!,
+                                      1,
+                                      color!,
+                                      size!,
+                                      widget.product.image![0],
+                                      widget.product.profitAmount!);
+                            } else {
+                              showToast(
+                                  'This product already exist in your cart');
+                            }
+                          }
+                        },
+                        borderRadius: 8.0,
+                        height: size.width * 0.13,
+                        gradientColors: [Color(0xFF0198DD), Color(0xFF19B52B)], width:  size.width * 0.5,
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    Expanded(
+                      child: GradientButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.flash_on, color: Colors.white),
+                            SizedBox(width: 10),
+                            Text(
+                              'Buy Now',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: size.width * 0.04,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {
+                          if (widget.product.size!.isNotEmpty &&
+                              _size == null) {
+                            showToast('Please select product size');
+                          } else {
+                            if (id == null) {
+                              if (productController.productIdList
+                                  .contains(widget.product.id)) {
+                                setState(() {
+                                  exist = true;
+                                });
+                                print('product $exist');
+                              }
+                            } else {
+                              if (userController.productIds
+                                  .contains(widget.product.id)) {
+                                setState(() {
+                                  exist = true;
+                                });
+                                print('user $exist');
+                              }
+                            }
+                            if (exist == false) {
+                              setState(() {
+                                exist = true;
+                              });
+                              String? size =
+                                  _size == null ? 'No Size' : _size;
+                              String? color = widget.product.colors!.isEmpty
+                                  ? 'No Color'
+                                  : widget.product.colors![indx];
+                              id == null
+                                  ? productController
+                                      .addToCart(
+                                          widget.product.title!,
+                                          widget.product.thumbNail!,
+                                          widget.product.id!,
+                                          widget.product.price!,
+                                          1,
+                                          color!,
+                                          size!,
+                                          widget.product.image![0],
+                                          widget.product.profitAmount!)
+                                      .then((value) {
+                                      Get.to(() => CartPage());
+                                    })
+                                  : userController
+                                      .addToUserCart(
+                                          widget.product.title!,
+                                          widget.product.thumbNail!,
+                                          widget.product.id!,
+                                          widget.product.price!,
+                                          1,
+                                          color!,
+                                          size!,
+                                          widget.product.image![0],
+                                          widget.product.profitAmount!)
+                                      .then((value) {
+                                      Get.to(() => CartPage());
+                                    });
+                            } else {
+                              Get.to(() => CartPage());
+                            }
+                          }
+                        },
+                        borderRadius: 8.0,
+                        height: size.width * 0.13,
+                        gradientColors: [Color(0xFF19B52B), Color(0xFF0198DD)], width: size.width * 0.5,
+                      ),
                     ),
                   ],
                 ),
