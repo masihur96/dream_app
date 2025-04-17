@@ -49,628 +49,299 @@ class _CartPageState extends State<CartPage> {
       productController.cartList.isEmpty ? productController.getCart() : null;
     }
 
-    print(
-        " productController.cartList.length   ${productController.cartList.length}");
-
     final size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Obx(() => Scaffold(
+        backgroundColor: Colors.grey[50], // Light background for better contrast
           appBar: AppBar(
-            title: id == null
-                ? Column(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: Column(
                     children: [
                       Text(
-                        "Your Cart",
-                        style: Theme.of(context).textTheme.titleLarge!,
-                      ),
-                      productController.cartList == null
-                          ? Text(
-                              "0 items",
-                              style: Theme.of(context).textTheme.titleSmall,
-                            )
-                          : Text(
-                              "${productController.cartList.length} items",
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                    ],
-                  )
-                : Column(
-                    children: [
+                "Shopping Cart",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: kPrimaryColor,
+                ),
+              ),
                       Text(
-                        "Your Cart",
-                        style: Theme.of(context).textTheme.titleMedium!,
-                      ),
-                      userController.cartList == null
-                          ? Text(
-                              "0 items",
-                              style: Theme.of(context).textTheme.titleSmall!,
-                            )
-                          : Text(
-                              "${userController.cartList.length} items",
-                              style: Theme.of(context).textTheme.titleSmall!,
+                id == null 
+                  ? "${productController.cartList.length} items"
+                  : "${userController.cartList.length} items",
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Colors.grey[600],
+                ),
                             ),
                     ],
                   ),
+          centerTitle: true,
           ),
           body: id == null
-              ? Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: getProportionateScreenWidth(context, 20)),
-                  child: productController.cartList.length != 0
-                      ? ListView.builder(
-                          itemCount: productController.cartList == null
-                              ? 0
-                              : productController.cartList.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: Dismissible(
-                                  key: Key(productController.cartList[index].id
-                                      .toString()),
-                                  direction: DismissDirection.endToStart,
-                                  onDismissed: (direction) {
-                                    setState(() {
-                                      productController.cartList
-                                          .removeAt(index);
-                                    });
-                                  },
-                                  background: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20),
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFFFE6E6),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Spacer(),
-                                        Icon(
-                                          FontAwesomeIcons.textSlash,
-                                          size: 10,
-                                          color: Colors.black.withOpacity(0.5),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  child: Container(
-                                    color: Colors.white,
-                                    //Color(0xFF19B52B).withOpacity(0.1),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: CachedNetworkImage(
-                                              imageUrl: productController
-                                                  .cartList[index].thumbnail!,
-                                              imageBuilder:
-                                                  (context, imageProvider) =>
-                                                      Container(
-                                                width: size.width * .25,
-                                                height: size.width * .2,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover),
-                                                ),
-                                              ),
-                                              placeholder: (context, url) =>
-                                                  CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.grey.shade200,
-                                                      radius: size.width * .08,
-                                                      backgroundImage: AssetImage(
-                                                          'assets/images/placeholder.png')),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
-                                              fit: BoxFit.cover,
-                                            )
-                                            // Image.network(
-                                            //   productController.cartList[index].productImage!,
-                                            //   width: 80,
-                                            // ),
-                                            ),
-                                        Expanded(
-                                            child: Wrap(
-                                          direction: Axis.vertical,
-                                          children: [
-                                            Container(
-                                                padding:
-                                                    EdgeInsets.only(left: 14),
-                                                child: Text(
-                                                  productController
-                                                      .cartList[index]
-                                                      .productName!,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium!
-                                                      .copyWith(
-                                                          color: Colors.black),
-                                                )),
-                                            Container(
-                                              padding:
-                                                  EdgeInsets.only(left: 14),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+            ? _buildCartList(context, size, productController.cartList)
+            : _buildCartList(context, size, userController.cartList),
+        bottomNavigationBar: _buildBottomBar(context, size),
+      )),
+    );
+  }
+
+  Widget _buildCartList(BuildContext context, Size size, List cartList) {
+    if (cartList.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      if (productController
-                                                              .cartList[index]
-                                                              .quantity !=
-                                                          1) {
-                                                        int qnty =
-                                                            productController
-                                                                    .cartList[
-                                                                        index]
-                                                                    .quantity! -
-                                                                1;
-                                                        productController
-                                                            .updateCart(
-                                                                productController
-                                                                    .cartList[
-                                                                        index]
-                                                                    .productId!,
-                                                                qnty);
-                                                        setState(() {
-                                                          productController
-                                                              .total = productController
-                                                                  .total -
-                                                              int.parse(
-                                                                  productController
-                                                                      .cartList[
-                                                                          index]
-                                                                      .price!);
-                                                        });
-                                                      }
-                                                    },
-                                                    child: Icon(
-                                                      FontAwesomeIcons.minus,
-                                                      size: 20,
-                                                      color: Colors.black,
-                                                      // color: Colors.black
-                                                      //     .withOpacity(0.5),
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      '${productController.cartList[index].quantity}',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium!
-                                                          .copyWith(
-                                                              color:
-                                                                  Colors.black),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      int qnty =
-                                                          productController
-                                                                  .cartList[
-                                                                      index]
-                                                                  .quantity! +
-                                                              1;
-                                                      productController
-                                                          .updateCart(
-                                                              productController
-                                                                  .cartList[
-                                                                      index]
-                                                                  .productId!,
-                                                              qnty);
-                                                      setState(() {
-                                                        productController
-                                                            .total = productController
-                                                                .total +
-                                                            int.parse(
-                                                                productController
-                                                                    .cartList[
-                                                                        index]
-                                                                    .price!);
-                                                      });
-                                                    },
-                                                    child: Icon(
-                                                      FontAwesomeIcons.plus,
-                                                      size: 20,
-                                                      color: Colors.black
-                                                          .withOpacity(0.5),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        )),
-                                        Padding(
-                                          padding: const EdgeInsets.all(14),
-                                          child: Text(
-                                            "\৳${productController.cartList[index].price}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium!
-                                                .copyWith(color: Colors.black),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              _showProductDialog(index);
-                                            },
-                                            child: Icon(
-                                              FontAwesomeIcons.trash,
-                                              size: 20,
-                                              color:
-                                                  Colors.black.withOpacity(0.5),
-                                            ),
+            Lottie.asset(
+              'assets/images/empty_place_holder.json',
+              width: size.width * 0.7,
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Your cart is empty",
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.grey[800],
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              "Add items to start shopping",
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: Colors.grey[600],
                                           ),
                                         ),
                                       ],
                                     ),
-                                  )),
-                            );
-                          })
-                      : Center(
-                          child: Lottie.asset(
-                              'assets/images/empty_place_holder.json')),
-                )
-              : Padding(
+      );
+    }
+
+    return ListView.builder(
                   padding: EdgeInsets.symmetric(
-                      horizontal: getProportionateScreenWidth(context, 20)),
-                  child: userController.cartList.length != 0
-                      ? ListView.builder(
-                          itemCount: userController.cartList == null
-                              ? 0
-                              : userController.cartList.length,
+        horizontal: getProportionateScreenWidth(context, 20),
+        vertical: 15,
+      ),
+      itemCount: cartList.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.only(bottom: 15),
+          child: Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
                               child: Dismissible(
-                                  key: Key(userController.cartList[index].id
-                                      .toString()),
+              key: Key(cartList[index].id.toString()),
                                   direction: DismissDirection.endToStart,
-                                  onDismissed: (direction) {
-                                    setState(() {
-                                      userController.cartList.removeAt(index);
-                                    });
-                                  },
                                   background: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                  color: Colors.red[50],
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Spacer(),
                                         Icon(
-                                          FontAwesomeIcons.textSlash,
-                                          size: 10,
-                                          color: Colors.black.withOpacity(0.5),
+                      Icons.delete_outline,
+                      color: Colors.red,
+                      size: 28,
                                         ),
                                       ],
                                     ),
                                   ),
                                   child: Container(
-                                    color: Colors.white,
+                padding: EdgeInsets.all(12),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
                                       children: [
-                                        Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                    // Product Image
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
                                             child: CachedNetworkImage(
-                                              imageUrl: userController
-                                                  .cartList[index].thumbnail!,
-                                              imageBuilder:
-                                                  (context, imageProvider) =>
-                                                      Container(
-                                                width: size.width * .25,
-                                                height: size.width * .2,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover),
-                                                ),
-                                              ),
-                                              placeholder: (context, url) =>
-                                                  CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.grey.shade200,
-                                                      radius: size.width * .08,
-                                                      backgroundImage: AssetImage(
-                                                          'assets/images/placeholder.png')),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
-                                              fit: BoxFit.cover,
-                                            )
-                                            // Image.network(
-                                            //   productController.cartList[index].productImage!,
-                                            //   width: 80,
-                                            // ),
-                                            ),
+                        imageUrl: cartList[index].thumbnail!,
+                        width: size.width * 0.25,
+                        height: size.width * 0.25,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey[200],
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation(kPrimaryColor),
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.grey[200],
+                          child: Icon(Icons.error_outline),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    // Product Details
                                         Expanded(
-                                            child: Wrap(
-                                          direction: Axis.vertical,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              userController
-                                                  .cartList[index].productName!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium!
-                                                  .copyWith(
-                                                      color: Colors.black),
-                                            ),
+                            cartList[index].productName!,
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey[800],
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            "৳${cartList[index].price}",
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          // Quantity Controls
                                             Container(
-                                              padding:
-                                                  EdgeInsets.only(left: 14),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      if (userController
-                                                              .cartList[index]
-                                                              .quantity !=
-                                                          1) {
-                                                        int qnty =
-                                                            userController
-                                                                    .cartList[
-                                                                        index]
-                                                                    .quantity! -
-                                                                1;
-                                                        userController
-                                                            .updateUserCart(
-                                                                userController
-                                                                    .cartList[
-                                                                        index]
-                                                                    .productId!,
-                                                                qnty);
-                                                        setState(() {
-                                                          userController
-                                                              .total = userController
-                                                                  .total -
-                                                              int.parse(
-                                                                  userController
-                                                                      .cartList[
-                                                                          index]
-                                                                      .price!);
-                                                        });
-                                                      }
-                                                    },
-                                                    child: Icon(
-                                                      FontAwesomeIcons.minus,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                _buildQuantityButton(
+                                  icon: Icons.remove,
+                                  onTap: () => _updateQuantity(index, false),
+                                ),
+                                SizedBox(
+                                  width: 40,
                                                     child: Text(
-                                                      '${userController.cartList[index].quantity}',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium!
-                                                          .copyWith(
-                                                              color:
-                                                                  Colors.black),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      int qnty = userController
-                                                              .cartList[index]
-                                                              .quantity! +
-                                                          1;
-                                                      userController
-                                                          .updateUserCart(
-                                                              userController
-                                                                  .cartList[
-                                                                      index]
-                                                                  .productId!,
-                                                              qnty);
-                                                      setState(() {
-                                                        userController
-                                                            .total = userController
-                                                                .total +
-                                                            int.parse(
-                                                                userController
-                                                                    .cartList[
-                                                                        index]
-                                                                    .price!);
-                                                      });
-                                                    },
-                                                    child: Icon(
-                                                      FontAwesomeIcons.plus,
-                                                      color: Colors.black,
+                                    '${cartList[index].quantity}',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                _buildQuantityButton(
+                                  icon: Icons.add,
+                                  onTap: () => _updateQuantity(index, true),
+                                ),
+                              ],
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                            )
-                                          ],
-                                        )),
-                                        Padding(
-                                          padding: const EdgeInsets.all(14),
-                                          child: Text(
-                                            "\৳${userController.cartList[index].price}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium!
-                                                .copyWith(color: Colors.black),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              _showUserDialog(index);
-                                            },
-                                            child: Icon(
-                                              FontAwesomeIcons.trash,
-                                              color: Colors.grey,
+                    ),
+                  ],
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  )),
-                            );
-                          })
-                      : Center(
-                          child: Lottie.asset(
-                              'assets/images/empty_place_holder.json')),
-                ),
-          bottomNavigationBar: Obx(() => Container(
-                padding: EdgeInsets.symmetric(
-                  //vertical: getProportionateScreenWidth(context,15),
-                  horizontal: getProportionateScreenWidth(context, 30),
-                ),
-                height: size.height * .11,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildQuantityButton({required IconData icon, required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: Colors.grey[300]!),
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+          color: kPrimaryColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomBar(BuildContext context, Size size) {
+    final total = id == null ? productController.total : userController.total;
+    final hasItems = id == null 
+        ? productController.cartList.isNotEmpty
+        : userController.cartList.isNotEmpty;
+
+    return Container(
+      padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   boxShadow: [
                     BoxShadow(
-                      offset: Offset(0, -15),
+            offset: Offset(0, -4),
                       blurRadius: 20,
-                      color: Color(0xFFDADADA).withOpacity(0.15),
-                    )
+            color: Colors.black.withOpacity(0.05),
+          ),
                   ],
                 ),
                 child: SafeArea(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                          height: getProportionateScreenHeight(context, 20)),
-                      id == null
-                          ? Row(
+            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text.rich(
-                                  TextSpan(
-                                    text: "Total:\n",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(color: Colors.black),
-                                    children: [
-                                      TextSpan(
-                                        text: '\৳${productController.total}',
+                Text(
+                  "Total",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Colors.grey[600],
+                  ),
+                ),
+                Text(
+                  "৳$total",
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: kPrimaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                productController.cartList.length != 0
-                                    ? GradientButton(
-                                        child: Text(
-                                          'Buy Now',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+            SizedBox(height: 20),
+            if (hasItems)
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
                                         onPressed: () {
                                           id == null
                                               ? Get.to(() => LoginPage())
                                               : Get.to(() => PaymentPage(
                                                   '',
-                                                  userController
-                                                      .userModel.value.name,
-                                                  userController
-                                                      .userModel.value.phone,
+                            userController.userModel.value.name,
+                            userController.userModel.value.phone,
                                                   '',
                                                   '',
                                                   '',
                                                   ''));
                                         },
-                                        borderRadius: 5.0,
-                                        height: size.width * .1,
-                                        width: size.width * .25,
-                                        gradientColors: [
-                                            Color(0xFF0198DD),
-                                            Color(0xFF19B52B)
-                                          ])
-                                    : Container()
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    text: "Total:\n",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(color: Colors.black),
-                                    children: [
-                                      TextSpan(
-                                        text: '\৳${userController.total}',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                userController.cartList.length != 0
-                                    ? GradientButton(
-                                        child: Text(
-                                          'Buy Now',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        onPressed: () {
-                                          id == null
-                                              ? Get.to(() => LoginPage())
-                                              : Get.to(() => PaymentPage(
-                                                  '',
-                                                  userController
-                                                      .userModel.value.name,
-                                                  userController
-                                                      .userModel.value.phone,
-                                                  '',
-                                                  '',
-                                                  '',
-                                                  ''));
-                                        },
-                                        borderRadius: 5.0,
-                                        height: size.width * .1,
-                                        width: size.width * .25,
-                                        gradientColors: [
-                                            Color(0xFF0198DD),
-                                            Color(0xFF19B52B)
-                                          ])
-                                    : Container()
-                              ],
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: kPrimaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Proceed to Checkout',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
                             ),
                     ],
                   ),
                 ),
-              )))),
     );
   }
 
@@ -788,6 +459,60 @@ class _CartPageState extends State<CartPage> {
             ),
           );
         });
+  }
+
+  void _updateQuantity(int index, bool increase) {
+    if (id == null) {
+      // Handle quantity update for non-logged in users
+      if (increase) {
+        int qnty = productController.cartList[index].quantity! + 1;
+        productController.updateCart(
+          productController.cartList[index].productId!,
+          qnty,
+        );
+        setState(() {
+          productController.total = productController.total +
+              int.parse(productController.cartList[index].price!);
+        });
+      } else {
+        if (productController.cartList[index].quantity! > 1) {
+          int qnty = productController.cartList[index].quantity! - 1;
+          productController.updateCart(
+            productController.cartList[index].productId!,
+            qnty,
+          );
+          setState(() {
+            productController.total = productController.total -
+                int.parse(productController.cartList[index].price!);
+          });
+        }
+      }
+    } else {
+      // Handle quantity update for logged in users
+      if (increase) {
+        int qnty = userController.cartList[index].quantity! + 1;
+        userController.updateUserCart(
+          userController.cartList[index].productId!,
+          qnty,
+        );
+        setState(() {
+          userController.total = userController.total +
+              int.parse(userController.cartList[index].price!);
+        });
+      } else {
+        if (userController.cartList[index].quantity! > 1) {
+          int qnty = userController.cartList[index].quantity! - 1;
+          userController.updateUserCart(
+            userController.cartList[index].productId!,
+            qnty,
+          );
+          setState(() {
+            userController.total = userController.total -
+                int.parse(userController.cartList[index].price!);
+          });
+        }
+      }
+    }
   }
 
   Future<bool> _onBackPressed() {
