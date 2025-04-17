@@ -240,44 +240,55 @@ class _HomeNavState extends State<HomeNav> with TickerProviderStateMixin {
       onWillPop: _onBackPressed,
       child: Scaffold(
         backgroundColor: Colors.green[50],
-        bottomNavigationBar: MotionTabBar(
-          initialSelectedTab: 'Product',
-          labels: const ["Product", "Package", "Cart", "Account"],
-          icons: const [
-            FontAwesomeIcons.tshirt,
-            FontAwesomeIcons.boxOpen,
-            FontAwesomeIcons.cartPlus,
-            FontAwesomeIcons.userCircle
-          ],
-          tabSize: 50,
-          tabBarHeight: AppBar().preferredSize.height,
-          textStyle: TextStyle(
-            fontSize: size.width * .04,
-            color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? Colors.white
-                : Colors.black,
-            fontWeight: FontWeight.w400,
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: Offset(0, -5),
+              ),
+            ],
           ),
-          tabIconColor: Colors.grey.shade500,
-          tabIconSize: 24.0,
-          tabIconSelectedSize: 24.0,
-          tabSelectedColor: Color(0xFF19B52B).withOpacity(0.1),
-          tabIconSelectedColor: kPrimaryColor,
-          tabBarColor:
-              MediaQuery.of(context).platformBrightness == Brightness.dark
-                  ? Colors.black.withOpacity(0.5)
-                  : Colors.white,
-          onTabItemSelected: (int value) {
-            setState(() {
-              _tabController!.index = value;
-              // value == 0
-              //     ? _pageTitle = 'Product'
-              //     : value == 1
-              //         ? _pageTitle = 'Package'
-              //         :value == 2?_pageTitle = 'Cart'
-              //         : _pageTitle = 'Account';
-            });
-          },
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFF19B52B).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  indicator: UnderlineTabIndicator(
+                    borderSide: BorderSide.none,
+                  ),
+                  labelColor: Color(0xFF19B52B),
+                  unselectedLabelColor: Colors.grey.shade400,
+                  tabs: [
+                    Tab(
+                      icon: Icon(FontAwesomeIcons.tshirt),
+                      text: 'Product',
+                    ),
+                    Tab(
+                      icon: Icon(FontAwesomeIcons.boxOpen),
+                      text: 'Package',
+                    ),
+                    Tab(
+                      icon: Icon(FontAwesomeIcons.cartPlus),
+                      text: 'Cart',
+                    ),
+                    Tab(
+                      icon: Icon(FontAwesomeIcons.userCircle),
+                      text: 'Account',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
         body: TabBarView(
           physics: NeverScrollableScrollPhysics(),

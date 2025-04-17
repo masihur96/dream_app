@@ -4,12 +4,12 @@ import 'package:dream_app/variables/size_config.dart';
 
 class IconBtnWithCounter extends StatefulWidget {
   const IconBtnWithCounter({
-    required this.svgSrc,
+    required this.icon,
     required this.numOfitem,
     this.press,
   });
 
-  final String svgSrc;
+  final IconData icon;
   final int numOfitem;
   final GestureTapCallback? press;
 
@@ -29,7 +29,7 @@ class _IconBtnWithCounterState extends State<IconBtnWithCounter> {
           clipBehavior: Clip.none,
           children: [
             Icon(
-              Icons.shopping_cart_rounded,
+              widget.icon,
               size: 28,
               color: kSecondaryColor.withOpacity(0.6),
             ),
