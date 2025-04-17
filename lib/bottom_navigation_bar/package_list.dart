@@ -71,10 +71,13 @@ class _PackageListPageState extends State<PackageListPage> {
                                         childAspectRatio: 5 / 9),
                                 itemBuilder: (BuildContext context, int index) {
                                   // if (demoProducts[index].isPopular)
-                                  return PackageCard(
-                                    product:
-                                        productController.packageList[index],
-                                    sold: false,
+                                  return Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: PackageCard(
+                                      product:
+                                          productController.packageList[index],
+                                      sold: false,
+                                    ),
                                   );
                                   // return SizedBox
                                   //     .shrink(); // here by default width and height is 0

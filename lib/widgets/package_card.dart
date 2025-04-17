@@ -14,10 +14,6 @@ class PackageCard extends StatefulWidget {
 }
 
 class _PackageCardState extends State<PackageCard> {
-  // List selectedColor=[];
-  // List selectedSize=[];
-  // List <Color> colors =<Color>[Colors.green, Colors.red,Colors.greenAccent,];
-  // List <String> productSizes=['S','M','L'];
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -31,179 +27,169 @@ class _PackageCardState extends State<PackageCard> {
                       sold: widget.sold,
                     )));
       },
-      child: Column(
-        children: [
-          Card(
-            // color: Colors.red,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, 2),
             ),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 5,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image Section
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              child: Container(
+                height: size.width * 0.45,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: kSecondaryColor.withOpacity(0.1),
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Container(
-                    height: size.width * .53,
-                    decoration: BoxDecoration(
-                        //color: Colors.green.shade100,
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    child: widget.product.image != null
-                        ? Hero(
-                            tag: widget.product.id.toString(),
-                            child: CachedNetworkImage(
-                              imageUrl: widget.product.thumbNail!,
-                              placeholder: (context, url) => CircleAvatar(
-                                  backgroundColor: Colors.grey.shade200,
-                                  radius: size.width * .2,
-                                  backgroundImage: AssetImage(
-                                      'assets/images/placeholder.png')),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                child: widget.product.image != null
+                    ? Hero(
+                        tag: widget.product.id.toString(),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.product.thumbNail!,
+                          placeholder: (context, url) => Container(
+                            color: Colors.grey.shade200,
+                            child: Image.asset(
+                              'assets/images/placeholder.png',
                               fit: BoxFit.cover,
-                            ))
-                        : Container(),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          fit: BoxFit.cover,
+                        ))
+                    : Container(),
+              ),
+            ),
+            
+            // Content Section
+            Padding(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Text(
+                    widget.product.title!,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: size.width * .02,
-                    left: size.width * .02,
-                    right: size.width * .01,
+                  SizedBox(height: 8),
+                  
+                  // Price
+                  Text(
+                    '৳${widget.product.price}',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: kPrimaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          width: size.width * .24,
-                          child: Text(
-                            widget.product.title!,
-                            style: Theme.of(context).textTheme.titleSmall,
-                            // style: TextStyle(color: Colors.black),
-                          )),
-                      Column(
+                  SizedBox(height: 8),
+                  
+                  // Status (if sold)
+                  if (widget.sold && widget.product.status != null)
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        widget.product.status!,
+                        style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  
+                  // Size and Color Section
+                  if (widget.product.size!.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Row(
                         children: [
                           Text(
-                            '\৳${widget.product.price}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(color: Colors.red),
+                            "Size: ",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: widget.product.size!
+                                  .take(3)
+                                  .map((size) => Padding(
+                                        padding: EdgeInsets.only(right: 4),
+                                        child: Text(
+                                          size,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey[800],
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
                           ),
                         ],
-                      )
-                    ],
-                  ),
-                ),
-                widget.sold == false
-                    ? Container()
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      ),
+                    ),
+                  
+                  if (widget.product.colors!.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Row(
                         children: [
-                          Container(
-                              padding: EdgeInsets.only(left: size.width * .02),
-                              child: Text(
-                                widget.product.status!,
-                                style: TextStyle(color: kPrimaryColor),
-                              )),
+                          Text(
+                            "Color: ",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          Row(
+                            children: widget.product.colors!
+                                .take(4)
+                                .map((color) => Padding(
+                                      padding: EdgeInsets.only(right: 4),
+                                      child: Container(
+                                        width: 12,
+                                        height: 12,
+                                        decoration: BoxDecoration(
+                                          color: Color(int.parse(color)),
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.grey.shade300,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
                         ],
                       ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: size.width * .02,
-                      left: size.width * .02,
-                      right: size.width * .02,
-                      bottom: size.width * .02),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: size.width * .07,
-                        child: Row(
-                          children: [
-                            Text("Size: ",
-                                style: Theme.of(context).textTheme.titleSmall!),
-                            ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              physics: ClampingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: widget.product.size!.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: Text(
-                                      widget.product.size![index],
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .copyWith(fontSize: 13),
-                                    )
-                                    // Container(
-                                    //     height: size.width*.05,
-                                    //     width: size.width*.05,
-                                    //     decoration: BoxDecoration(
-                                    //         shape: BoxShape.circle,
-                                    //         border: Border.all(width: 1,color:Colors.grey)
-                                    //     ),
-                                    //
-                                    //     child: Center(child: Text(widget.product.size![index]))),
-                                    //***
-                                    // onTap: (){
-                                    //
-                                    //   if(selectedSize.contains(index)){
-                                    //     setState(() {
-                                    //       selectedSize.remove(index);
-                                    //     });
-                                    //
-                                    //   }else {
-                                    //     setState(() {
-                                    //       selectedSize.add(index);
-                                    //     });
-                                    //   }
-                                    // },
-                                    );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: size.width * .07,
-                        child: Row(
-                          children: [
-                            Text(
-                              "Color: ",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(fontSize: 13),
-                            ),
-                            ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              physics: ClampingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: widget.product.colors!.length,
-                              itemBuilder: (context, index) {
-                                return Icon(Icons.circle_outlined,
-                                    size: 15,
-                                    color: Color(int.parse(
-                                        widget.product.colors![index])));
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                    ),
+                ],
+              ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
