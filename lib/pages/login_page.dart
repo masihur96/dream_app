@@ -29,123 +29,193 @@ class _LoginPageState extends State<LoginPage> {
       onWillPop: _onBackPressed,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text(
-            'Log In',
-          ),
-        ),
-        body: Container(
-          child: ListView(
-            children: <Widget>[
-              SizedBox(height: size.height * .05),
-              Container(
-                padding:
-                    EdgeInsets.all(getProportionateScreenWidth(context, 5)),
-                height: getProportionateScreenWidth(context, 120),
-                width: getProportionateScreenWidth(context, 120),
-                decoration: BoxDecoration(
-                  color: Colors.white70,
-                  shape: BoxShape.circle,
-                ),
-                child: Image.asset("assets/icons/dream.png"),
+        body: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.blue.shade50,
+                  Colors.white,
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Column(
-                  children: <Widget>[
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            children: <Widget>[
-                              TextFormField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Phone number",
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey[400])),
-                                style: Theme.of(context).textTheme.titleSmall,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter a user name';
-                                  } else if (!RegExp(r'^[0-9]{11}$')
-                                      .hasMatch(value)) {
-                                    return 'Please Entered a valid Phone Number';
-                                  }
-                                  return null; // Return null if the input is valid.
-                                },
-                                keyboardType: TextInputType.phone,
-                                onSaved: (value) {
-                                  _phone = value!;
-                                },
+            ),
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              children: <Widget>[
+                SizedBox(height: size.height * .08),
+                Hero(
+                  tag: 'logo',
+                  child: Container(
+                    height: getProportionateScreenWidth(context, 150),
+                    width: getProportionateScreenWidth(context, 150),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Image.asset("assets/icons/dream.png"),
+                  ),
+                ),
+                SizedBox(height: 30),
+                Text(
+                  'Welcome Back!',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Sign in to continue',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 40),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.phone, color: Color(0xFF0198DD)),
+                            hintText: "Phone number",
+                            hintStyle: TextStyle(color: Colors.grey[400]),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          style: TextStyle(fontSize: 16),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter a phone number';
+                            } else if (!RegExp(r'^[0-9]{11}$').hasMatch(value)) {
+                              return 'Please enter a valid phone number';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.phone,
+                          onSaved: (value) => _phone = value!,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: TextFormField(
+                          obscureText: _isVisible,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.lock, color: Color(0xFF19B52B)),
+                            hintText: "Password",
+                            hintStyle: TextStyle(color: Colors.grey[400]),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isVisible ? Icons.visibility_off : Icons.visibility,
+                                color: Colors.grey,
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              TextFormField(
-                                obscureText: _isVisible,
-                                keyboardType: TextInputType.visiblePassword,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Password",
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey[400]),
-                                    suffixIcon: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _isVisible = !_isVisible;
-                                          });
-                                        },
-                                        child: Icon(_isVisible == false
-                                            ? Icons.visibility
-                                            : Icons.visibility_off))),
-                                style: Theme.of(context).textTheme.titleSmall,
-                                onSaved: (value) {
-                                  _password = value!;
-                                },
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter a password';
-                                  } else if (!RegExp(
-                                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|:"<>?`\-=[\]\\;\./]).{6,}$')
-                                      .hasMatch(value)) {
-                                    return 'Uppercase, lowercase, digit, special, 6+ characters';
-                                  }
-                                  return null; // Return null if the input is valid.
-                                },
-                              )
-                            ],
+                              onPressed: () => setState(() => _isVisible = !_isVisible),
+                            ),
+                          ),
+                          style: TextStyle(fontSize: 16),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter a password';
+                            } else if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|:"<>?`\-=[\]\\;\./]).{6,}$').hasMatch(value)) {
+                              return 'Password must contain: uppercase, lowercase, number, special char';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) => _password = value!,
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ForgotPassword()),
+                          ),
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color: Color(0xFF0198DD),
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Center(
-                      child: GradientButton(
-                          child: Text(
-                            'Login',
-                            style: TextStyle(color: Colors.white),
+                      SizedBox(height: 30),
+                      GradientButton(
+                        child: Text(
+                          'LOGIN',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-
-                              showLoadingDialog(context);
-                              QuerySnapshot snapshot = await FirebaseFirestore
-                                  .instance
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            showLoadingDialog(context);
+                            
+                            try {
+                              QuerySnapshot snapshot = await FirebaseFirestore.instance
                                   .collection('Users')
                                   .where('id', isEqualTo: _phone)
                                   .get();
-                              final List<QueryDocumentSnapshot> user =
-                                  snapshot.docs;
+                              
+                              final List<QueryDocumentSnapshot> user = snapshot.docs;
+                              
                               if (user.isNotEmpty) {
                                 if (user[0].get('password') == _password) {
-                                  SharedPreferences pref =
-                                      await SharedPreferences.getInstance();
+                                  SharedPreferences pref = await SharedPreferences.getInstance();
                                   pref.setString('id', _phone);
                                   closeLoadingDialog(context);
                                   showToast("Successfully logged in");
@@ -156,55 +226,47 @@ class _LoginPageState extends State<LoginPage> {
                                 }
                               } else {
                                 closeLoadingDialog(context);
-                                showToast(
-                                    "No User is registered with this phone");
+                                showToast("No user registered with this phone number");
                               }
+                            } catch (e) {
+                              closeLoadingDialog(context);
+                              showToast("An error occurred. Please try again.");
                             }
-                          },
-                          borderRadius: 5.0,
-                          height: size.width * .12,
-                          width: size.width * .9,
-                          gradientColors: [
-                            Color(0xFF0198DD),
-                            Color(0xFF19B52B)
-                          ]),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 9.0, right: 9.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          }
+                        },
+                        borderRadius: 12.0,
+                        height: 55,
+                        width: size.width * .9,
+                        gradientColors: [Color(0xFF0198DD), Color(0xFF19B52B)],
+                      ),
+                      SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          InkWell(
-                            child: Text(
-                              "Forgot Password?",
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ForgotPassword()));
-                            },
+                          Text(
+                            "Don't have an account? ",
+                            style: TextStyle(color: Colors.grey[600]),
                           ),
-                          InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => RegisterPage()));
-                              },
-                              child: Text(
-                                "Create New Account?",
-                                style: Theme.of(context).textTheme.titleSmall,
-                              )),
+                          TextButton(
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => RegisterPage()),
+                            ),
+                            child: Text(
+                              'Register',
+                              style: TextStyle(
+                                color: Color(0xFF0198DD),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
