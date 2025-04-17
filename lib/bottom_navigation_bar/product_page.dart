@@ -164,135 +164,103 @@ class _ProductPageState extends State<ProductPage> {
     fetch1();
     return Obx(() => Scaffold(
         drawer: Drawer(
-          child: ListView(
-            children: <Widget>[
-              const SizedBox(
-                height: 20,
-              ),
-              GestureDetector(
-                onTap: (){
-                  //saveNote();
-                   _uploadFile(context);
-                },
-                child: Container(
-                  height: 80,
-                  width: 80,
-                  decoration: const BoxDecoration(
-                    color: Colors.white70,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.asset("assets/icons/dream.png"),
+          child: Column(
+            children: [
+              // Drawer Header with User Profile
+              UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Image.asset("assets/icons/dream.png", fit: BoxFit.cover),
+                ),
+                accountName: Text(
+                  id != null ? userController.userModel.value.name ?? "Guest User" : "Guest User",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                accountEmail: Text(
+                  id != null ? userController.userModel.value.email ?? "" : "Please login to continue",
+                  style: TextStyle(fontSize: 14),
                 ),
               ),
-              const SizedBox(height: 20),
-              const Divider(),
-              // ListView.builder(
-              //   shrinkWrap: true,
-              //   itemCount: productController.categoryList.length,
-              //     itemBuilder:(_,index){
-              //   return InkWell(
-              //     onTap: (){
-              //         Get.to(()=>CategoryProductsPage(productController.categoryList[index].category));
-              //     },
-              //     child: ListTile(
-              //       title: Text(productController.categoryList[index].category),
-              //     ),
-              //   );
-              // }),
-
-              // ListView.builder(
-              //     shrinkWrap: true,
-              //     itemCount: productController.categoryList.length,
-              //     itemBuilder:(_,index){
-              //       return InkWell(
-              //         onTap: (){
-              //           Get.to(()=>CategoryProductsPage(productController.categoryList[index].category));
-              //         },
-              //         child: ExpansionTile(
-              //           expandedAlignment: Alignment.topLeft,
-              //           title: Text(productController.categoryList[index].category),
-              //           children: <Widget>[
-              //             Row(
-              //               children: [
-              //                 SizedBox(width: 30,),
-              //                 Text("children 1",style: TextStyle(color: Colors.black),),
-              //               ],
-              //             ),
-              //             SizedBox(height: 20,),
-              //             Row(
-              //               children: [
-              //                 SizedBox(width: 30,),
-              //                 Text("children 2",style: TextStyle(color: Colors.black),),
-              //               ],
-              //             ),
-              //             SizedBox(height: 10,),],
-              //         )
-              //       );
-              //     }),
-              InkWell(
-                onTap: () async {
-                  Get.to(() => CategoryProductsPage());
-                },
-                child: ListTile(
-                  title: Text(
-                    'Categories',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  leading: Icon(
-                    Icons.category_outlined,
-                  ),
-                ),
-              ),
-              Divider(),
-
-              InkWell(
-                onTap: () async {
-                  Get.to(() => ContactInfo());
-                },
-                child: ListTile(
-                  title: Text('Contact Info',
-                      style: Theme.of(context).textTheme.titleSmall),
-                  leading: Icon(
-                    Icons.contact_support_outlined,
-                  ),
-                ),
-              ),
-              Divider(),
-
-              id == null
-                  ? InkWell(
-                      onTap: () async {
-                        Get.to(() => LoginPage());
+              
+              // Drawer Body - Scrollable List
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    // Home
+                    ListTile(
+                      leading: Icon(Icons.home_outlined),
+                      title: Text('Home', style: Theme.of(context).textTheme.titleMedium),
+                      onTap: () {
+                        Get.back();
                       },
-                      child: ListTile(
-                        title: Text(
-                          'Log In',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        leading: Icon(
-                          Icons.login,
-                        ),
-                      ),
-                    )
-                  : InkWell(
-                      onTap: () async {
-                        SharedPreferences pref =
-                            await SharedPreferences.getInstance();
-                        pref.clear();
-                        userController.clear();
-                        Get.offAll(() => const HomeNav());
-                        showToast('Logged Out');
-                      },
-                      child: ListTile(
-                        title: Text(
-                          'Log Out',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        leading: Icon(
-                          Icons.logout,
-                        ),
-                      ),
                     ),
+                    
+                    // Categories
+                    ListTile(
+                      leading: Icon(Icons.category_outlined),
+                      title: Text('Categories', style: Theme.of(context).textTheme.titleMedium),
+                      trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: () {
+                        Get.to(() => CategoryProductsPage());
+                      },
+                    ),
+                    
+                    // Contact Info
+                    ListTile(
+                      leading: Icon(Icons.contact_support_outlined),
+                      title: Text('Contact Info', style: Theme.of(context).textTheme.titleMedium),
+                      onTap: () {
+                        Get.to(() => ContactInfo());
+                      },
+                    ),
+
+                    // Upload Media
+                    ListTile(
+                      leading: Icon(Icons.upload_outlined),
+                      title: Text('Upload Media', style: Theme.of(context).textTheme.titleMedium),
+                      onTap: () {
+                        _uploadFile(context);
+                      },
+                    ),
+
+                    Divider(),
+
+                    // Authentication
+                    id == null
+                        ? ListTile(
+                            leading: Icon(Icons.login),
+                            title: Text('Login', style: Theme.of(context).textTheme.titleMedium),
+                            onTap: () {
+                              Get.to(() => LoginPage());
+                            },
+                          )
+                        : ListTile(
+                            leading: Icon(Icons.logout),
+                            title: Text('Logout', style: Theme.of(context).textTheme.titleMedium),
+                            onTap: () async {
+                              SharedPreferences pref = await SharedPreferences.getInstance();
+                              pref.clear();
+                              userController.clear();
+                              Get.offAll(() => const HomeNav());
+                              showToast('Logged Out');
+                            },
+                          ),
+                  ],
+                ),
+              ),
+              
+              // Bottom Section with App Version
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Version 1.0.0',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
             ],
           ),
         ),
