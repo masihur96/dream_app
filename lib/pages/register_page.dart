@@ -41,507 +41,173 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      //resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Register'),
+        title: Text('Create Account', style: TextStyle(fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         toolbarHeight: AppBar().preferredSize.height,
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           icon: Icon(Icons.arrow_back),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              //padding: EdgeInsets.all(getProportionateScreenWidth(context,5)),
-              height: getProportionateScreenWidth(context, 120),
-              width: getProportionateScreenWidth(context, 120),
-              decoration: BoxDecoration(
-                color: Colors.white70,
-                shape: BoxShape.circle,
-              ),
-              child: Image.asset("assets/icons/dream.png"),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Name(Same as Nid/BC/Passport)",
-                                hintStyle: TextStyle(color: Colors.grey[400])),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter a user name';
-                              }
-                              return null; // Return null if the input is valid.
-                            },
-                            onSaved: (value) {
-                              _name = value!;
-                            },
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => BounchingDialog(
-                                  padding: screenSize(context, 0.1),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Column(
-                                      children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Address Must be correct",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.w500),
-                                        ),
-                                        SizedBox(
-                                          height: screenSize(context, 1.4),
-                                          child: SingleChildScrollView(
-                                            child: Form(
-                                              key: _addressFormKey,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  SizedBox(
-                                                    height: screenSize(
-                                                        context, .06),
-                                                  ),
-                                                  TextFormField(
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        hintText: "Country",
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[400])),
-                                                    validator: (value) {
-                                                      if (value!.isEmpty) {
-                                                        return ' This field is Required !';
-                                                      }
-                                                      return null; // Return null if the input is valid.
-                                                    },
-                                                    onSaved: (value) {
-                                                      _country = value!;
-                                                    },
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall,
-                                                  ),
-                                                  SizedBox(
-                                                    height: screenSize(
-                                                        context, .03),
-                                                  ),
-                                                  TextFormField(
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        hintText: "District",
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[400])),
-                                                    validator: (value) {
-                                                      if (value!.isEmpty) {
-                                                        return ' This field is Required !';
-                                                      }
-                                                      return null; // Return null if the input is valid.
-                                                    },
-                                                    onSaved: (value) {
-                                                      _distric = value!;
-                                                    },
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall,
-                                                  ),
-                                                  SizedBox(
-                                                    height: screenSize(
-                                                        context, .03),
-                                                  ),
-                                                  TextFormField(
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        hintText:
-                                                            "Sub-District",
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[400])),
-                                                    validator: (value) {
-                                                      if (value!.isEmpty) {
-                                                        return ' This field is Required !';
-                                                      }
-                                                      return null; // Return null if the input is valid.
-                                                    },
-                                                    onSaved: (value) {
-                                                      _subDistric = value!;
-                                                    },
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall,
-                                                  ),
-                                                  SizedBox(
-                                                    height: screenSize(
-                                                        context, .03),
-                                                  ),
-                                                  TextFormField(
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        hintText: "Post",
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[400])),
-                                                    validator: (value) {
-                                                      if (value!.isEmpty) {
-                                                        return 'This field is Required !';
-                                                      }
-                                                      return null; // Return null if the input is valid.
-                                                    },
-                                                    onSaved: (value) {
-                                                      _post = value!;
-                                                    },
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall,
-                                                  ),
-                                                  SizedBox(
-                                                    height: screenSize(
-                                                        context, .03),
-                                                  ),
-                                                  TextFormField(
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        hintText: "Area",
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[400])),
-                                                    validator: (value) {
-                                                      if (value!.isEmpty) {
-                                                        return 'This field is Required !';
-                                                      }
-                                                      return null; // Return null if the input is valid.
-                                                    },
-                                                    onSaved: (value) {
-                                                      _area = value!;
-                                                    },
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall,
-                                                  ),
-                                                  SizedBox(
-                                                    height: screenSize(
-                                                        context, .03),
-                                                  ),
-                                                  TextFormField(
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        hintText: "Road Number",
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[400])),
-                                                    validator: (value) {
-                                                      if (value!.isEmpty) {
-                                                        return 'This field is Required !';
-                                                      }
-                                                      return null; // Return null if the input is valid.
-                                                    },
-                                                    onSaved: (value) {
-                                                      _road = value!;
-                                                    },
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall,
-                                                  ),
-                                                  SizedBox(
-                                                    height: screenSize(
-                                                        context, .03),
-                                                  ),
-                                                  TextFormField(
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        hintText:
-                                                            "House or Holding Number",
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey[400])),
-                                                    validator: (value) {
-                                                      if (value!.isEmpty) {
-                                                        return 'This field is Required !';
-                                                      }
-                                                      return null; // Return null if the input is valid.
-                                                    },
-                                                    onSaved: (value) {
-                                                      _house = value!;
-                                                    },
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: screenSize(context, .1),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              width: screenSize(context, 0.02),
-                                            ),
-                                            MaterialButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                "Cancel",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall!
-                                                    .copyWith(
-                                                        color: Colors.red),
-                                              ),
-                                            ),
-                                            MaterialButton(
-                                              onPressed: () {
-                                                if (_addressFormKey
-                                                    .currentState!
-                                                    .validate()) {
-                                                  _addressFormKey.currentState!
-                                                      .save();
-
-                                                  setState(() {
-                                                    _address =
-                                                        "$_house $_road $_area $_post $_subDistric $_distric $_country";
-                                                  });
-
-                                                  Navigator.pop(context);
-                                                  print("object");
-                                                }
-                                              },
-                                              child: Text(
-                                                "Ok",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30)),
-                                  border:
-                                      Border.all(width: 1, color: Colors.grey)),
-                              child: TextFormField(
-                                enabled: false,
-                                controller:
-                                    TextEditingController(text: _address),
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Address",
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey[400])),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Please enter Address';
-                                  }
-                                  return null; // Return null if the input is valid.
-                                },
-                                onSaved: (value) {
-                                  _address = value!;
-                                },
-                                style: Theme.of(context).textTheme.titleSmall,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Phone number",
-                                hintStyle: TextStyle(color: Colors.grey[400])),
-                            keyboardType: TextInputType.phone,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter Phone Number';
-                              } else if (!RegExp(r'^[0-9]{11}$')
-                                  .hasMatch(value)) {
-                                return 'Please Entered a valid Phone Number';
-                              }
-                              return null; // Return null if the input is valid.
-                            },
-                            onSaved: (value) {
-                              _phone = value!;
-                            },
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Password",
-                                hintStyle: TextStyle(color: Colors.grey[400])),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter Phone Number';
-                              } else if (!RegExp(
-                                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|:"<>?`\-=[\]\\;\./]).{6,}$')
-                                  .hasMatch(value)) {
-                                return 'Uppercase, lowercase, digit, special, 6+ characters';
-                              }
-                              return null; // Return null if the input is valid.
-                            },
-                            onSaved: (value) {
-                              _password = value!;
-                            },
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Nid/BirthCertificate/Passport",
-                                hintStyle: TextStyle(color: Colors.grey[400])),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter Valid NID';
-                              }
-                              return null; // Return null if the input is valid.
-                            },
-                            onSaved: (value) {
-                              _nbp = value!;
-                            },
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Refer Code",
-                                hintStyle: TextStyle(color: Colors.grey[400])),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter Refer Code';
-                              } else if (!RegExp(r'^MakB.{6}$')
-                                  .hasMatch(value)) {
-                                return 'Please Entered valid Refer Code';
-                              }
-                              return null; // Return null if the input is valid.
-                            },
-                            onSaved: (value) {
-                              _referCode = value!;
-                            },
-                            style: Theme.of(context).textTheme.titleSmall,
+      body: Container(
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  children: [
+                    Container(
+                      height: getProportionateScreenWidth(context, 100),
+                      width: getProportionateScreenWidth(context, 100),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 10,
+                            offset: Offset(0, 3),
                           ),
                         ],
                       ),
+                      child: Image.asset("assets/icons/dream.png"),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: GradientButton(
-                        child: Text(
-                          'Continue',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Join Dream App",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "Create your account to get started",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      _buildTextField(
+                        context,
+                        "Name(Same as Nid/BC/Passport)",
+                        (value) {
+                          if (value!.isEmpty) return 'Please enter a user name';
+                          return null;
+                        },
+                        (value) => _name = value!,
+                      ),
+                      SizedBox(height: 15),
+                      _buildAddressField(context),
+                      SizedBox(height: 15),
+                      _buildTextField(
+                        context,
+                        "Phone number",
+                        (value) {
+                          if (value!.isEmpty) return 'Please enter Phone Number';
+                          if (!RegExp(r'^[0-9]{11}$').hasMatch(value)) {
+                            return 'Please Enter a valid Phone Number';
+                          }
+                          return null;
+                        },
+                        (value) => _phone = value!,
+                        keyboardType: TextInputType.phone,
+                      ),
+                      SizedBox(height: 15),
+                      _buildTextField(
+                        context,
+                        "Password",
+                        (value) {
+                          if (value!.isEmpty) return 'Please enter Password';
+                          if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|:"<>?`\-=[\]\\;\./]).{6,}$')
+                              .hasMatch(value)) {
+                            return 'Uppercase, lowercase, digit, special, 6+ characters';
+                          }
+                          return null;
+                        },
+                        (value) => _password = value!,
+                        obscureText: true,
+                      ),
+                      SizedBox(height: 15),
+                      _buildTextField(
+                        context,
+                        "Nid/BirthCertificate/Passport",
+                        (value) {
+                          if (value!.isEmpty) return 'Please enter Valid NID';
+                          return null;
+                        },
+                        (value) => _nbp = value!,
+                      ),
+                      SizedBox(height: 15),
+                      _buildTextField(
+                        context,
+                        "Refer Code",
+                        (value) {
+                          if (value!.isEmpty) return 'Please enter Refer Code';
+                          if (!RegExp(r'^MakB.{6}$').hasMatch(value)) {
+                            return 'Please Enter valid Refer Code';
+                          }
+                          return null;
+                        },
+                        (value) => _referCode = value!,
+                      ),
+                      SizedBox(height: 30),
+                      GradientButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-
                             showLoadingDialog(Get.context!);
                             var newString = nanoid(6);
-
                             String myReferCode = 'MakB$newString';
-                            print(myReferCode);
-                            bool isReg =
-                                await authController.isRegistered(_phone);
+                            
+                            bool isReg = await authController.isRegistered(_phone);
                             if (!isReg) {
                               if (productController.cartList.length != 0) {
-                                await userController
-                                    .getReferUser(_referCode)
-                                    .then((value) {
+                                await userController.getReferUser(_referCode).then((value) {
                                   if (userController.referredList.length !=
-                                      int.parse(userController
-                                          .referUserModel.value.referLimit!)) {
-                                    if (userController
-                                        .isReferCodeCorrect.value) {
+                                      int.parse(userController.referUserModel.value.referLimit!)) {
+                                    if (userController.isReferCodeCorrect.value) {
                                       Get.back();
                                       Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => PaymentPage(
-                                                  _referCode,
-                                                  _name,
-                                                  _phone,
-                                                  _address,
-                                                  _password,
-                                                  _nbp,
-                                                  myReferCode)));
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PaymentPage(
+                                            _referCode,
+                                            _name,
+                                            _phone,
+                                            _address,
+                                            _password,
+                                            _nbp,
+                                            myReferCode,
+                                          ),
+                                        ),
+                                      );
                                     }
-                                    // authController.createUser(
-                                    //   _name,
-                                    //   _address,
-                                    //   _phone,
-                                    //   _password,
-                                    //   _nbp,
-                                    //   _referCode,
-                                    // );
                                   } else {
                                     Get.back();
-                                    showToast(
-                                        'Refer limit is over for this referCode!');
+                                    showToast('Refer limit is over for this referCode!');
                                   }
                                 });
                               } else {
                                 Get.back();
-                                showToast(
-                                    'Registration cannot be done with empty cart!');
+                                showToast('Registration cannot be done with empty cart!');
                               }
                             } else {
                               Get.back();
@@ -549,16 +215,181 @@ class _RegisterPageState extends State<RegisterPage> {
                             }
                           }
                         },
-                        borderRadius: 5.0,
-                        height: size.width * .12,
+                        borderRadius: 10.0,
+                        height: size.width * .14,
                         width: size.width * .9,
-                        gradientColors: [Color(0xFF0198DD), Color(0xFF19B52B)]),
+                        gradientColors: [Color(0xFF0198DD), Color(0xFF19B52B)],
+                        child: Text(
+                          'Create Account',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                    ],
                   ),
-                  SizedBox(height: 10),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+    BuildContext context,
+    String hintText,
+    String? Function(String?)? validator,
+    void Function(String?)? onSaved, {
+    bool obscureText = false,
+    TextInputType? keyboardType,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextFormField(
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey[400]),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        ),
+        validator: validator,
+        onSaved: onSaved,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        style: Theme.of(context).textTheme.titleSmall,
+      ),
+    );
+  }
+
+  Widget _buildAddressField(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => BounchingDialog(
+            padding: screenSize(context, 0.1),
+            height: screenSize(context, 1.7 ),
+
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  Text(
+                    "Address Details",
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  SizedBox(height: screenSize(context, .1)),
+                  SingleChildScrollView(
+                    child: Form(
+                      key: _addressFormKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildAddressTextField("Country", (value) => _country = value!),
+                          _buildAddressTextField("District", (value) => _distric = value!),
+                          _buildAddressTextField("Sub-District", (value) => _subDistric = value!),
+                          _buildAddressTextField("Post", (value) => _post = value!),
+                          _buildAddressTextField("Area", (value) => _area = value!),
+                          _buildAddressTextField("Road Number", (value) => _road = value!),
+                          _buildAddressTextField("House or Holding Number", (value) => _house = value!),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenSize(context, .1)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildDialogButton("Cancel", Colors.red, () => Navigator.pop(context)),
+                      SizedBox(width: 20),
+                      _buildDialogButton(
+                        "Save",
+                        Colors.green,
+                        () {
+                          if (_addressFormKey.currentState!.validate()) {
+                            _addressFormKey.currentState!.save();
+                            setState(() {
+                              _address = "$_house $_road $_area $_post $_subDistric $_distric $_country";
+                            });
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
-            )
-          ],
+            ),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: TextFormField(
+          enabled: false,
+          controller: TextEditingController(text: _address),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: "Address",
+            hintStyle: TextStyle(color: Colors.grey[400]),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            suffixIcon: Icon(Icons.edit, color: Colors.grey[400]),
+          ),
+          validator: (value) {
+            if (value!.isEmpty) return 'Please enter Address';
+            return null;
+          },
+          onSaved: (value) => _address = value!,
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddressTextField(String hint, void Function(String?)? onSaved) {
+    return Column(
+      children: [
+        TextFormField(
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: hint,
+            hintStyle: TextStyle(color: Colors.grey[400]),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          ),
+          validator: (value) {
+            if (value!.isEmpty) return 'This field is Required !';
+            return null;
+          },
+          onSaved: onSaved,
+        ),
+        SizedBox(height: screenSize(context, .03)),
+      ],
+    );
+  }
+
+  Widget _buildDialogButton(String text, Color color, VoidCallback onPressed) {
+    return MaterialButton(
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
